@@ -56,9 +56,13 @@ if(req.file || message !== ''){
 }
 })
 
-router.get('/photos',(req,res)=>{
+router.get('/photos',async(req,res)=>{
   try{
-    res.sendFile(join(__dirname, '../uploads',`${req.query.file}`));
+    let result = await Feedposts.find({filename:req.query.file})
+    if(result.length === 1){
+      res.sendFile(join(__dirname, '../uploads',`${req.query.file}`));
+    }
+   
   }catch(err){
     console.log(err)
   }
