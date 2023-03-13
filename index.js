@@ -24,7 +24,7 @@ app.use(express.static('uploads'))
 
 const socketIO = require('socket.io')(http, {
     cors: {
-        origin: ["https://socialmediax.netlify.app","http://localhost:3000"],
+        origin: [process.env.FRONTEND_URL,"http://localhost:3000"],
         credentials: true
     }
 });
@@ -33,7 +33,6 @@ const socketIO = require('socket.io')(http, {
 
 socketIO.on('connection', (socket) => {
    
-
 
     socket.on('online', async(data) => {
    
