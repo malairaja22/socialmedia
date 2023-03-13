@@ -20,13 +20,12 @@ app.use(express.json());
 app.use(express.static('uploads'))
 
 
-const frontendurl = process.env.FRONTEND_URL;
 
 
 
 const socketIO = require('socket.io')(http, {
     cors: {
-        origin: [frontendurl,"http://localhost:3000"],
+        origin: ['https://socialmediax.netlify.app',"http://localhost:3000"],
         credentials: true
     }
 });
