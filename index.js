@@ -24,7 +24,8 @@ app.use(express.static('uploads'))
 
 const socketIO = require('socket.io')(http, {
     cors: {
-        origin: "http://localhost:3000"
+        origin: [process.env.FRONTEND_URL,"http://localhost:3000"],
+        credentials: true
     }
 });
 
@@ -41,6 +42,14 @@ socketIO.on('connection', (socket) => {
             await Profile.findOneAndUpdate({ email:data.email,uid:data.uid},{online:"online",socketid:socket.id})
             socketIO.emit("onlinerefresh",Math.random())
          }
+        if(data.username){
+                let result1 = await Profile.find({username:data.username})
+                if(result1.length === 1){
+                    setTimeout(()=>{
+                        socketIO.to(result1[0].socketid).emit('messageread1',{username:result[0].username,value:Math.random()})
+                       },2000)
+                }
+            }
     });
 
 
@@ -188,9 +197,9 @@ mongoose.connect(process.env.URL,{useNewUrlParser:true, useUnifiedTopology:true}
     console.log(err)
 })
 
-app.use(express.static(path.join(__dirname,'Frontend/build/index.html')));
-app.get('*', function(req, res) {
-    res.sendFile(path.join(__dirname, 'Frontend/build/index.html'), function(err) {
+// app.use(express.static(path.join(__dirname,'Frontend/build/index.html')));
+// app.get('*', function(req, res) {
+//     res.sendFile(path.join(__dirname, 'Frontend/build/index.html'), function(err) {
       
-    })
-  })
+//     })
+//   })
